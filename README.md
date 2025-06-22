@@ -18,7 +18,7 @@ Este proyecto es un script en Python que utiliza Selenium para monitorear la dis
 * **Python 3.11 o superior**
 * **Google Chrome estable**
 * **ChromeDriver compatible con tu versión de Chrome**
-* **Cuenta en **Resend**(https://resend.com) con dominio verificado o dirección autorizada
+* **Cuenta en Resend**(https://resend.com) con dominio verificado o dirección autorizada
 * **Archivo `.env`** con tu clave de API de Resend y destinatario
 
 ---
