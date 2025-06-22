@@ -10,7 +10,7 @@ import os
 
 load_dotenv()
 
-BROWSER_PATH = "/usr/bin/chromium"
+BROWSER_PATH = "/usr/bin/google-chrome-stable"
 
 EMAIL_USER = os.getenv("EMAIL_USER")
 EMAIL_PASS = os.getenv("EMAIL_PASS")

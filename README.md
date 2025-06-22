@@ -27,7 +27,6 @@ Este proyecto es un script en Python que utiliza Selenium para monitorear la dis
 
 ### 1. Instala Google Chrome y ChromeDriver
 
-
 ```bash
 wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
 echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" \
@@ -65,9 +64,20 @@ EMAIL_TO=destinatario@gmail.com
 
 ---
 
-### 4. Instala las dependencias de Python
+### 4. Crea un entorno virtual e instala dependencias
+
+Primero asegurate de instalar `python3-venv` si no lo tienes:
 
 ```bash
+sudo apt install python3-venv
+```
+
+Luego, crea un entorno virtual e instala las dependencias:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
@@ -94,7 +104,7 @@ crontab -e
 Y añade:
 
 ```bash
-*/30 * * * * cd /ruta/al/repositorio && /usr/bin/python3 main.py
+*/30 * * * * cd /ruta/al/repositorio && /ruta/a/venv/bin/python3 main.py
 ```
 
 ---
