@@ -19,59 +19,49 @@ EMAIL_TO = os.getenv("EMAIL_TO")
 OUT_OF_STOCK_TEXT = ["fuera de inventario", "agotado", "no disponible", "sin stock", "fuera de stock"]
 IN_STOCK_TEXT = ["disponible", "en stock", "en inventario", "agregar a carrito", "listo para recoger"]
 
-PRODUCT_URLS = ["https://www.pricesmart.com/es-sv/producto/owala-botellas-para-agua-2-unidades-710-ml-24-oz-468318/468318-0840467300561", "https://www.pricesmart.com/es-sv/producto/owala-botellas-para-agua-2-unidades-710-ml-24-oz-468318/468318-0840467300585", "https://www.pricesmart.com/es-sv/producto/thermoflask-botella-de-acero-inoxidable-para-ninos-y-ninas-473-18-ml-16-oz-480593/480593-0885395102436"]
+PRODUCT_URLS = ["https://www.pricesmart.com/es-sv/producto/owala-botellas-para-agua-2-unidades-710-ml-24-oz-468318/468318-0840467300561", "https://www.pricesmart.com/es-sv/producto/owala-botellas-para-agua-2-unidades-710-ml-24-oz-468318/468318-0840467300585"]
 
-SEARCH_URL = "https://www.pricesmart.com/es-sv/busqueda?q=termo"
+SEARCH_URL = "https://www.pricesmart.com/es-sv/busqueda?q=owala"
 
+# ✅ Función unificada para enviar correos
+def enviar_correo_smtp(asunto, cuerpo):
+    if not EMAIL_USER or not EMAIL_PASS:
+        print("❌ Credenciales de correo no válidas.")
+        return
+
+    msg = MIMEMultipart()
+    msg["From"] = EMAIL_USER
+    msg["To"] = EMAIL_TO
+    msg["Subject"] = asunto
+    msg.attach(MIMEText(cuerpo, "plain"))
+
+    try:
+        print(f"📤 Enviando correo: {asunto}")
+        with smtplib.SMTP("smtp.gmail.com", 587) as server:
+            server.starttls()
+            server.login(EMAIL_USER, EMAIL_PASS)
+            server.send_message(msg)
+        print("✅ Correo enviado correctamente.")
+    except smtplib.SMTPAuthenticationError as e:
+        print(f"❌ Error al autenticar en SMTP: {e}")
+    except Exception as e:
+        print(f"❌ Error al enviar el correo: {e}")
+
+# 📩 Envíos especializados usando la función principal
 def enviar_correo(urlProduct):
     asunto = "¡Producto Owala DISPONIBLE en PriceSmart!"
     cuerpo = f"Ya hay stock disponible: {urlProduct}"
-    msg = MIMEMultipart()
-    msg["From"] = EMAIL_USER
-    msg["To"] = EMAIL_TO
-    msg["Subject"] = asunto
-    msg.attach(MIMEText(cuerpo, "plain"))
+    enviar_correo_smtp(asunto, cuerpo)
 
-    with smtplib.SMTP("smtp.gmail.com", 587) as server:
-        server.starttls()
-        server.login(EMAIL_USER, EMAIL_PASS)
-        server.send_message(msg)
-
-    print("✅ Correo enviado.")
-
-def enviar_correo_busqueda(Products): # Products es una tupla de productos (nombre, url)
-    asunto = "¡Productos DISPONIBLES en PriceSmart!\n"
+def enviar_correo_busqueda(Products):
+    asunto = "¡Productos DISPONIBLES en PriceSmart!"
     cuerpo = "Los siguientes productos están disponibles:\n" + "\n".join([f"{name}: {url}" for name, url in Products])
-    msg = MIMEMultipart()
-    msg["From"] = EMAIL_USER
-    msg["To"] = EMAIL_TO
-    msg["Subject"] = asunto
-    msg.attach(MIMEText(cuerpo, "plain"))
+    enviar_correo_smtp(asunto, cuerpo)
 
-    with smtplib.SMTP("smtp.gmail.com", 587) as server:
-        server.starttls()
-        server.login(EMAIL_USER, EMAIL_PASS)
-        server.send_message(msg)
-
-    print("✅ Correo de búsqueda enviado.")
-    
-def enviar_correo_error(type):
+def enviar_correo_error(tipo):
     asunto = "Error al verificar stock en PriceSmart"
-    cuerpo = f"Ocurrió un error al intentar verificar el stock {type}."
-    msg = MIMEMultipart()
-    msg["From"] = EMAIL_USER
-    msg["To"] = EMAIL_TO
-    msg["Subject"] = asunto
-    msg.attach(MIMEText(cuerpo, "plain"))
-
-    with smtplib.SMTP("smtp.gmail.com", 587) as server:
-        server.starttls()
-        server.login(EMAIL_USER, EMAIL_PASS)
-        server.send_message(msg)
-
-    print("✅ Correo de error enviado.")
-    
-    
+    cuerpo = f"Ocurrió un error al intentar verificar el stock {tipo}."
+    enviar_correo_smtp(asunto, cuerpo) 
 
 def check_stock(url):
     chrome_options = Options()

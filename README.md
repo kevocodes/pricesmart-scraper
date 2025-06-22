@@ -1,45 +1,59 @@
 # 🛒 PriceSmart Stock Monitor (Scraper)
 
-Este proyecto es un script en Python que utiliza Selenium y Docker para monitorear la disponibilidad de productos en [PriceSmart El Salvador](https://www.pricesmart.com/es-sv/) y notificar por correo electrónico cuando haya stock disponible.
+Este proyecto es un script en Python que utiliza Selenium para monitorear la disponibilidad de productos en [PriceSmart El Salvador](https://www.pricesmart.com/es-sv/) y notificar por correo electrónico cuando haya stock disponible.
 
 ---
 
 ## 🚀 Características
 
-- Scraping automatizado en modo headless con Chromium.
+- Scraping automatizado en modo headless con Google Chrome.
 - Revisión de disponibilidad desde la **página de búsqueda** o productos individuales.
 - Envío de notificación por correo cuando hay productos disponibles.
-- Contenedor Docker liviano y fácil de desplegar en cualquier servidor.
+- Compatible con ejecución manual o programada (ej. `cron`).
 
 ---
 
 ## 📦 Requisitos
 
-- Docker instalado
-- Cuenta de Gmail (o cualquier SMTP)
-- Contraseña de aplicación si usas Gmail
-- Archivo `.env` con tus credenciales
+- **Python 3.11 o superior**
+- **Google Chrome estable**
+- **ChromeDriver compatible con tu versión de Chrome**
+- **Cuenta de Gmail** (o cualquier SMTP)
+- **Archivo `.env` con credenciales de correo**
 
 ---
 
-## ⚙️ Instalación y ejecución
+## 🛠️ Instalación
 
-### 1. Clona este repositorio o descarga el `.zip`
+### 1. Instala Google Chrome y ChromeDriver
+
+
+```bash
+wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" \
+  | sudo tee /etc/apt/sources.list.d/google-chrome.list
+sudo apt update
+sudo apt install -y google-chrome-stable
+```
+
+---
+
+### 2. Clona el repositorio
 
 ```bash
 git clone https://github.com/kevocodes/pricesmart-scraper.git
 cd pricesmart-scraper
 ```
 
-### 2. Crea tu archivo `.env`
+---
 
-Copia el ejemplo:
+### 3. Crea tu archivo `.env`
 
 ```bash
 cp .env.example .env
 ```
 
-Edita `.env` con tus datos SMTP:
+Edita el archivo `.env` con tus datos SMTP:
 
 ```env
 EMAIL_USER=tucorreo@gmail.com
@@ -47,37 +61,41 @@ EMAIL_PASS=tu_app_password
 EMAIL_TO=destinatario@gmail.com
 ```
 
-> ℹ️ Usa una contraseña de aplicación si estás usando Gmail con 2FA.
+> ℹ️ Usa una **contraseña de aplicación** si estás usando Gmail con verificación en dos pasos.
 
 ---
 
-### 3. Construye la imagen Docker
+### 4. Instala las dependencias de Python
 
 ```bash
-docker build -t pricesmart-scraper .
+pip install -r requirements.txt
 ```
 
 ---
 
-### 4. Ejecuta el scraper
+### 5. Ejecuta el script
 
 ```bash
-docker run --rm --env-file .env pricesmart-scraper
+python main.py
 ```
 
-Esto realizará el scraping y te enviará un correo si hay productos en stock.
+Esto realizará el scraping y enviará un correo si detecta productos disponibles.
 
 ---
 
-## 🕒 Ejecución automática
+## 🕒 Ejecución automática (opcional)
 
-Puedes programar este contenedor con `cron`:
+Puedes programar la ejecución automática con `cron`. Por ejemplo, para ejecutarlo cada 30 minutos:
 
 ```bash
-*/30 * * * * docker run --rm --env-file /ruta/a/.env pricesmart-scraper
+crontab -e
 ```
 
-Esto ejecuta el scraper cada 30 minutos.
+Y añade:
+
+```bash
+*/30 * * * * cd /ruta/al/repositorio && /usr/bin/python3 main.py
+```
 
 ---
 
@@ -85,8 +103,6 @@ Esto ejecuta el scraper cada 30 minutos.
 
 - Python 3.11
 - Selenium
-- Chromium Headless
-- Docker
+- Google Chrome (headless)
+- ChromeDriver
 - Gmail SMTP
-
----
