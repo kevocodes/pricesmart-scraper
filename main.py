@@ -19,7 +19,8 @@ IN_STOCK_TEXT = ["disponible", "en stock", "en inventario", "agregar a carrito",
 
 PRODUCT_URLS = [
     "https://www.pricesmart.com/es-sv/producto/owala-botellas-para-agua-2-unidades-710-ml-24-oz-468318/468318-0840467300561",
-    "https://www.pricesmart.com/es-sv/producto/owala-botellas-para-agua-2-unidades-710-ml-24-oz-468318/468318-0840467300585"
+    "https://www.pricesmart.com/es-sv/producto/owala-botellas-para-agua-2-unidades-710-ml-24-oz-468318/468318-0840467300585",
+    "https://www.pricesmart.com/es-sv/producto/owala-botellas-para-agua-2-unidades-710-ml-24-oz-468318/468318-0840467300578"
 ]
 
 SEARCH_URL = "https://www.pricesmart.com/es-sv/busqueda?q=owala"
